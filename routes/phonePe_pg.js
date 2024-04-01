@@ -8,9 +8,11 @@ const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
 const merchantId = "PGTESTPAYUAT98";
 const saltKey = "bd5fd05b-506c-43a6-81b1-f7fd317bc71c";
 const saltIndex = 1;
-const merchantTransactionId = uniqid();
+const merchantTransactionId = '';
 phonePeRouter.post('/pay',auth, async (req, res) => {
     const payEndpoint = '/pg/v1/pay';
+    const merchantTransactionIdGenerator = uniqid();
+    merchantTransactionId = merchantTransactionIdGenerator;
     const { id, amount } = req.body;
     const payLoad = {
         "merchantId": merchantId,
