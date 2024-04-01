@@ -9,6 +9,7 @@ const adminRouter = require('./routes/admin');
 const productRouter = require('./routes/product');
 const userRouter = require('./routes/user');
 const phonePeRouter = require('./routes/phonePe_pg');
+const cartRouter = require('./routes/cart');
 //INITIALIZING EXPRESS
 const app = express();
 const port = 3000;
@@ -21,6 +22,7 @@ app.use(adminRouter);
 app.use(productRouter);
 app.use(userRouter);
 app.use(phonePeRouter);
+app.use(cartRouter);
 
 //CONNECTING TO MONGODB
 mongoose.connect(DB).then(()=>{

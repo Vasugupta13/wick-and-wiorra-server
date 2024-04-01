@@ -4,9 +4,9 @@ const axios = require('axios');
 const auth = require('../middlewares/auth');
 const uniqid = require('uniqid');
 const sha256 = require('sha256');
-const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/hermes";
-const merchantId = "PGTESTPAYUAT";
-const saltKey = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
+const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
+const merchantId = "PGTESTPAYUAT98";
+const saltKey = "bd5fd05b-506c-43a6-81b1-f7fd317bc71c";
 const saltIndex = 1;
 
 phonePeRouter.post('/pay',auth, async (req, res) => {
