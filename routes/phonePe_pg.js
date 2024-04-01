@@ -50,7 +50,7 @@ phonePeRouter.post('/pay',auth, async (req, res) => {
         });
 });
 
-phonePeRouter.get('/redirect-url/:merchantTransactionId',auth, async (req, res) => { 
+phonePeRouter.get('/redirect-url/:merchantTransactionId', async (req, res) => { 
     const { merchantTransactionId }= req.params;
     const xVerify = sha256(`/pg/v1/status/${merchantId}/${merchantTransactionId}` + saltKey) + "###" + saltIndex;
     console.log(merchantTransactionId);
