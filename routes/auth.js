@@ -5,7 +5,7 @@ const bcryptjs = require('bcryptjs');
 const authRouter = express.Router();
 const jwt = require('jsonwebtoken'); 
 const auth = require('../middlewares/auth');
-
+const Cart = require('../models/cart');
 authRouter.post('/admin/signup',async (req, res) => {
    try{
       const { name, email, password, type } = req.body;
@@ -20,7 +20,12 @@ authRouter.post('/admin/signup',async (req, res) => {
          password: hashPassword,
          type,
       })
+     let cart = new Cart({
+         userId: user._id,
+         products: []
+     });
       user = await user.save();
+      cart = await cart.save();
       res.json(user);
 
    }catch(err){
