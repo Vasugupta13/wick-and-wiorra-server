@@ -5,8 +5,8 @@ const auth = require('../middlewares/auth');
 const uniqid = require('uniqid');
 const sha256 = require('sha256');
 const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
-const merchantId = "PGTESTPAYUAT";
-const saltKey = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
+const merchantId = "PGTESTPAYUAT98";
+const saltKey = "bd5fd05b-506c-43a6-81b1-f7fd317bc71c";
 const saltIndex = 1;
 let merchantTransactionId = '';
 let addressLine;
@@ -93,7 +93,7 @@ phonePeRouter.get('/redirect-url/', async (req, res) => {
                 if(response.data.code === 'PAYMENT_SUCCESS'){
                     const orderOption =  {
                         method: 'post',
-                        url: `hhttps://amazon-clone-server-vvb5.onrender.com/api/order`,
+                        url: `https://amazon-clone-server-vvb5.onrender.com/api/order`,
                         headers: {},
                         data: {
                            cartItems : cartItems,
