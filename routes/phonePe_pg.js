@@ -39,7 +39,7 @@ phonePeRouter.post('/pay', auth, async (req, res) => {
         "merchantTransactionId": merchantTransactionId,
         "merchantUserId": id,
         "amount": amount, //in paise
-        "redirectUrl": `http://localhost:3000/redirect-url/`,
+        "redirectUrl": `https://amazon-clone-server-vvb5.onrender.com/redirect-url/`,
         "redirectMode": "REDIRECT",
         "mobileNumber": phoneNumber,
         "paymentInstrument": {
@@ -93,7 +93,7 @@ phonePeRouter.get('/redirect-url/', async (req, res) => {
                 if(response.data.code === 'PAYMENT_SUCCESS'){
                     const orderOption =  {
                         method: 'post',
-                        url: `http://localhost:3000/api/order`,
+                        url: `hhttps://amazon-clone-server-vvb5.onrender.com/api/order`,
                         headers: {},
                         data: {
                            cartItems : cartItems,
