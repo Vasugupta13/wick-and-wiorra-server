@@ -12,6 +12,14 @@ productsRouter.get('/api/products',auth, async (req, res) => {
           res.status(500).json({error: e.message});
     }
   });
+  productsRouter.get('/api/all-products',auth, async (req, res) => { 
+    try{
+         const products = await Product.find({});
+         res.json(products);
+    }catch(e){
+          res.status(500).json({error: e.message});
+    }
+  });
 
   productsRouter.get('/api/products/search/:name',auth, async (req, res) => { 
     try{

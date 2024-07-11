@@ -15,10 +15,6 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
-    address: {
-        type: String,
-        required: true,
-    },
     userId: {
         required: true,
         type: String,
@@ -30,6 +26,38 @@ const orderSchema = mongoose.Schema({
     status: {
         type: Number,
         default: 0,
+    },
+    transactionId: {
+        type: String,
+        required: false,
+    },
+    paymentState: {
+        type: String,
+        required: false,
+    },
+    customerName: {
+        type: String,
+        required: false,
+    },
+    customerAddressLine: {
+        type: String,
+        required: false,
+    },
+    customerCity: {
+        type: String,
+        required: false,
+    },
+    customerState: {
+        type: String,
+        required: false,
+    },
+    customerPincode: {
+        type: String,
+        required: false,
+    },
+    customerNumber: {
+        type: String,
+        required: false,
     },
 });
 

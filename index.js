@@ -10,6 +10,7 @@ const productRouter = require('./routes/product');
 const userRouter = require('./routes/user');
 const phonePeRouter = require('./routes/phonePe_pg');
 const cartRouter = require('./routes/cart');
+const addressRouter = require('./routes/address');
 //INITIALIZING EXPRESS
 const app = express();
 const port = 3000;
@@ -23,6 +24,7 @@ app.use(productRouter);
 app.use(userRouter);
 app.use(phonePeRouter);
 app.use(cartRouter);
+app.use(addressRouter)
 
 //CONNECTING TO MONGODB
 mongoose.connect(DB).then(()=>{
@@ -34,7 +36,3 @@ mongoose.connect(DB).then(()=>{
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`));
 
-//CREATING AN API 
-// app.get('/hello-world', (req, res) => {
-//     res.json({'hi': 'Hello World'});
-// });

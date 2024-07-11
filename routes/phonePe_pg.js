@@ -5,25 +5,43 @@ const auth = require('../middlewares/auth');
 const uniqid = require('uniqid');
 const sha256 = require('sha256');
 const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
-// const PHONE_PE_CANCEL_URL = "https://mercury-uat.phonepe.com/enterprise-sandbox/v3/charge";
 const merchantId = "PGTESTPAYUAT";
 const saltKey = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
 const saltIndex = 1;
 let merchantTransactionId = '';
+let addressLine;
+let city;
+let state;
+let pincode;
+let name;
+let cartItems;
+let amount;
+let userId;
+let phoneNumber;
 // let transactionId = '';
 phonePeRouter.post('/pay', auth, async (req, res) => {
     const payEndpoint = '/pg/v1/pay';
     const merchantTransactionIdGenerator = uniqid();
     merchantTransactionId = merchantTransactionIdGenerator;
-    const { id, amount } = req.body;
+    const { id, totalAmount , fullCart , customerNumber , customerName , customerAddressLine , customerCity , customerState , customerPincode } = req.body;
+    cartItems = fullCart;
+    amount = totalAmount;
+    addressLine = customerAddressLine;
+    city = customerCity;    
+    state = customerState;
+    pincode = customerPincode;
+    name = customerName;
+    phoneNumber = customerNumber;
+    userId = id;
+    console.log(totalAmount, fullCart, customerNumber, customerName, customerAddressLine, customerCity, customerState, customerPincode,);
     const payLoad = {
         "merchantId": merchantId,
         "merchantTransactionId": merchantTransactionId,
         "merchantUserId": id,
         "amount": amount, //in paise
-        "redirectUrl": `https://amazon-clone-server-vvb5.onrender.com/redirect-url/`,
+        "redirectUrl": `http://localhost:3000/redirect-url/`,
         "redirectMode": "REDIRECT",
-        "mobileNumber": "9999999999",
+        "mobileNumber": phoneNumber,
         "paymentInstrument": {
             "type": "PAY_PAGE"
         }
@@ -44,7 +62,6 @@ phonePeRouter.post('/pay', auth, async (req, res) => {
             request: base64EncodedPayload
         }
     };
-    console.log(merchantTransactionId);
     axios.request(options)
         .then(function (response) {
             console.log(response.data);
@@ -55,7 +72,6 @@ phonePeRouter.post('/pay', auth, async (req, res) => {
 });
 
 phonePeRouter.get('/redirect-url/', async (req, res) => {
-    // const { merchantTransactionId }= req.params;
     const xVerify = sha256(`/pg/v1/status/${merchantId}/${merchantTransactionId}` + saltKey) + "###" + saltIndex;
     console.log(merchantTransactionId);
     if (merchantTransactionId) {
@@ -74,7 +90,36 @@ phonePeRouter.get('/redirect-url/', async (req, res) => {
             .request(options)
             .then(function (response) {
                 console.log(response.data);
-                res.send(response.data);
+                if(response.data.code === 'PAYMENT_SUCCESS'){
+                    const orderOption =  {
+                        method: 'post',
+                        url: `http://localhost:3000/api/order`,
+                        headers: {},
+                        data: {
+                           cartItems : cartItems,
+                            totalPrice : response.data.data.amount,
+                            userId : userId,
+                            transactionId : response.data.data.transactionId,
+                            paymentState : response.data.data.state,
+                            customerName : name,
+                            customerAddressLine : addressLine,
+                            customerCity : city,
+                            customerState : state,
+                            customerPincode : pincode,
+                            customerNumber : phoneNumber,
+                        }
+                    };
+                    axios.request(orderOption)
+                    .then( async function (orderResponse) {
+                        console.log(orderResponse.data);
+                        res.send({ orderResponse: orderResponse.data, paymentResponse: response.data });
+                    }).catch(function (error) {
+                        console.error(error);
+                    });
+                }else{
+                    res.send(response.data);
+                }
+                
             })
             .catch(function (error) {
                 console.error(error);
@@ -84,30 +129,5 @@ phonePeRouter.get('/redirect-url/', async (req, res) => {
     }
 });
 
-// phonePeRouter.post('/cancel-Url', async (req, res) => {
-//   //  const { transactionId } = req.body;
-//     const xVerify = sha256(`/v3/charge/${merchantId}/${transactionId}/cancel` + saltKey) + "###" + saltIndex;
-//     console.log(transactionId);
-//     const options = {
-//         method: 'post',
-//         url: `${PHONE_PE_CANCEL_URL}/${merchantId}/${transactionId}/cancel`,
-//         headers: {
-//             accept: 'application/json',
-//             'Content-Type': 'application/json',
-//             "X-VERIFY": xVerify,
-//         },
-//         data: {}
-//     };
-//     axios
-//         .request(options)
-//         .then(function (response) {
-//             console.log(response.data);
-//             res.send(response.data);
-//         })
-//         .catch(function (error) {
-//             console.error(error);
-//         });
-
-// });
 
 module.exports = phonePeRouter;
