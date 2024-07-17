@@ -38,7 +38,7 @@ phonePeRouter.post('/pay', auth, async (req, res) => {
         "merchantId": merchantId,
         "merchantTransactionId": merchantTransactionId,
         "merchantUserId": id,
-        "amount": amount, //in paise
+        "amount": amount * 100, //in paise
         "redirectUrl": `https://amazon-clone-server-vvb5.onrender.com/redirect-url/`,
         "redirectMode": "REDIRECT",
         "mobileNumber": phoneNumber,
